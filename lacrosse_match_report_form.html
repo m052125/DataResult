@@ -1,0 +1,359 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{padding:1rem 0}
+.header-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem}
+.full{grid-column:1/-1}
+.section-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;font-weight:500}
+input,select{width:100%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:7px 10px;font-size:14px;color:var(--color-text-primary);font-family:var(--font-sans)}
+input:focus,select:focus{outline:2px solid var(--color-border-info);outline-offset:1px}
+input.narrow{width:56px;text-align:center}
+input.mid{width:72px;text-align:center}
+.qtab-bar{display:flex;gap:6px;margin-bottom:1rem}
+.qtab{padding:6px 16px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);font-size:13px;cursor:pointer;font-family:var(--font-sans);transition:background 0.1s}
+.qtab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);font-weight:500}
+.qpanel{display:none}
+.qpanel.active{display:block}
+.stat-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:10px}
+.stat-title{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:0.03em}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.slash{color:var(--color-text-tertiary);font-size:13px}
+.pct-out{font-size:13px;color:var(--color-text-info);min-width:44px;font-weight:500}
+.name-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.name-input{flex:1;min-width:80px;max-width:130px}
+.score-row{display:flex;align-items:center;gap:8px}
+.score-in{width:56px;text-align:center;font-size:18px;font-weight:500}
+.score-dash{font-size:18px;color:var(--color-text-secondary)}
+.gen-btn{width:100%;padding:12px;background:var(--color-background-info);color:var(--color-text-info);border:0.5px solid var(--color-border-info);border-radius:var(--border-radius-md);font-size:14px;font-weight:500;cursor:pointer;margin-top:1rem;font-family:var(--font-sans)}
+.gen-btn:hover{opacity:0.85}
+.output-area{margin-top:1rem;display:none}
+.output-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;font-size:13px;line-height:1.7;white-space:pre-wrap;color:var(--color-text-primary);font-family:var(--font-mono);max-height:340px;overflow-y:auto}
+.copy-btn{margin-top:8px;width:100%;padding:9px;background:transparent;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;color:var(--color-text-secondary);font-family:var(--font-sans)}
+.copy-btn:hover{background:var(--color-background-secondary)}
+.copy-btn.copied{color:var(--color-text-success);border-color:var(--color-border-success)}
+.match-type-row{display:flex;gap:8px;margin-bottom:1rem}
+.type-btn{flex:1;padding:8px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;cursor:pointer;font-size:13px;color:var(--color-text-secondary);font-family:var(--font-sans)}
+.type-btn.active{background:var(--color-background-success);color:var(--color-text-success);border-color:var(--color-border-success);font-weight:500}
+.time-row{display:flex;align-items:center;gap:6px}
+.time-in{width:44px;text-align:center}
+.colon{color:var(--color-text-tertiary)}
+.assist-row{display:flex;align-items:center;gap:6px;margin-left:8px}
+.sub-label{font-size:11px;color:var(--color-text-tertiary)}
+</style>
+
+<div class="wrap">
+<h2 class="sr-only">ラクロス試合速報入力フォーム</h2>
+
+<div style="margin-bottom:1rem">
+  <div class="section-label">試合種別</div>
+  <div class="match-type-row">
+    <button class="type-btn active" id="type-practice" onclick="setType('練習試合')">練習試合</button>
+    <button class="type-btn" id="type-league" onclick="setType('league')">リーグ戦</button>
+  </div>
+  <div id="league-num-wrap" style="display:none;margin-top:6px">
+    <div class="section-label">第◯戦</div>
+    <input type="number" id="league-num" placeholder="例：3" style="width:80px">
+  </div>
+</div>
+
+<div class="header-grid">
+  <div class="full">
+    <div class="section-label">対戦相手</div>
+    <input type="text" id="opponent" placeholder="◯◯大学">
+  </div>
+  <div class="full">
+    <div class="section-label">スコア（自チーム − 相手）</div>
+    <div class="score-row">
+      <input class="score-in" type="number" id="score-own" min="0" placeholder="0">
+      <span class="score-dash">−</span>
+      <input class="score-in" type="number" id="score-opp" min="0" placeholder="0">
+    </div>
+  </div>
+</div>
+
+<div class="qtab-bar">
+  <button class="qtab active" onclick="switchQ(0)">1Q</button>
+  <button class="qtab" onclick="switchQ(1)">2Q</button>
+  <button class="qtab" onclick="switchQ(2)">3Q</button>
+  <button class="qtab" onclick="switchQ(3)">4Q</button>
+</div>
+
+<div id="qpanels"></div>
+
+<button class="gen-btn" onclick="generate()">速報テキストを生成 ↗</button>
+
+<div class="output-area" id="output-area">
+  <div class="output-box" id="output-box"></div>
+  <button class="copy-btn" id="copy-btn" onclick="copyText()">クリップボードにコピー</button>
+</div>
+</div>
+
+<script>
+let matchType = '練習試合';
+
+function setType(t) {
+  if(t === 'league') {
+    matchType = 'league';
+    document.getElementById('type-league').classList.add('active');
+    document.getElementById('type-practice').classList.remove('active');
+    document.getElementById('league-num-wrap').style.display = 'block';
+  } else {
+    matchType = '練習試合';
+    document.getElementById('type-practice').classList.add('active');
+    document.getElementById('type-league').classList.remove('active');
+    document.getElementById('league-num-wrap').style.display = 'none';
+  }
+}
+
+const qs = ['1Q','2Q','3Q','4Q'];
+
+function makeStat(qidx) {
+  const q = qs[qidx];
+  const qi = `q${qidx}`;
+  return `
+<div class="stat-card">
+  <div class="stat-title">スコア（このクォーター）</div>
+  <div class="row">
+    <input class="narrow" type="number" id="${qi}-qs-own" min="0" placeholder="0">
+    <span class="slash">−</span>
+    <input class="narrow" type="number" id="${qi}-qs-opp" min="0" placeholder="0">
+  </div>
+</div>
+
+<div class="stat-card">
+  <div class="stat-title">ショット率</div>
+  <div class="row">
+    <input class="narrow" type="number" id="${qi}-shot-in" min="0" placeholder="決">
+    <span class="slash">/</span>
+    <input class="narrow" type="number" id="${qi}-shot-tot" min="0" placeholder="総">
+    <span class="pct-out" id="${qi}-shot-pct">— %</span>
+  </div>
+</div>
+
+<div class="stat-card">
+  <div class="stat-title">ATセーブ率</div>
+  <div class="row">
+    <input class="narrow" type="number" id="${qi}-at-in" min="0" placeholder="決">
+    <span class="slash">/</span>
+    <input class="narrow" type="number" id="${qi}-at-tot" min="0" placeholder="総">
+    <span class="pct-out" id="${qi}-at-pct">— %</span>
+  </div>
+</div>
+
+<div class="stat-card">
+  <div class="stat-title">フリシュー決定率</div>
+  <div class="row">
+    <input class="narrow" type="number" id="${qi}-fs-in" min="0" placeholder="決">
+    <span class="slash">/</span>
+    <input class="narrow" type="number" id="${qi}-fs-tot" min="0" placeholder="総">
+    <span class="pct-out" id="${qi}-fs-pct">— %</span>
+  </div>
+</div>
+
+<div class="stat-card">
+  <div class="stat-title">Gセーブ率</div>
+  <div class="name-row">
+    <input type="text" class="name-input" id="${qi}-g-name" placeholder="G名前">
+    <input class="narrow" type="number" id="${qi}-g-in" min="0" placeholder="セーブ">
+    <span class="slash">/</span>
+    <input class="narrow" type="number" id="${qi}-g-tot" min="0" placeholder="被シュ">
+    <span class="pct-out" id="${qi}-g-pct">— %</span>
+  </div>
+</div>
+
+<div class="stat-card">
+  <div class="stat-title">GBゲット率</div>
+  <div class="row" style="margin-bottom:6px">
+    <span class="sub-label">全体</span>
+    <input class="narrow" type="number" id="${qi}-gb-in" min="0" placeholder="ゲット">
+    <span class="slash">/</span>
+    <input class="narrow" type="number" id="${qi}-gb-tot" min="0" placeholder="総">
+    <span class="pct-out" id="${qi}-gb-pct">— %</span>
+  </div>
+  <div class="row">
+    <span class="sub-label">自陣</span>
+    <input class="narrow" type="number" id="${qi}-gb2-in" min="0" placeholder="ゲット">
+    <span class="slash">/</span>
+    <input class="narrow" type="number" id="${qi}-gb2-tot" min="0" placeholder="総">
+    <span class="pct-out" id="${qi}-gb2-pct">— %</span>
+  </div>
+</div>
+
+<div class="stat-card">
+  <div class="stat-title">個人ショット率</div>
+  <div class="name-row">
+    <input type="text" class="name-input" id="${qi}-ps-name" placeholder="名前">
+    <input class="narrow" type="number" id="${qi}-ps-in" min="0" placeholder="決">
+    <span class="slash">/</span>
+    <input class="narrow" type="number" id="${qi}-ps-tot" min="0" placeholder="総">
+    <span class="pct-out" id="${qi}-ps-pct">— %</span>
+    <div class="assist-row">
+      <span class="sub-label">アシスト</span>
+      <input class="narrow" type="number" id="${qi}-ps-ast" min="0" placeholder="0">
+      <span class="sub-label">本</span>
+    </div>
+  </div>
+</div>
+
+<div class="stat-card">
+  <div class="stat-title">ドローゲット率</div>
+  <div class="name-row" style="margin-bottom:6px">
+    <input type="text" class="name-input" id="${qi}-dr-name" placeholder="名前">
+    <input class="narrow" type="number" id="${qi}-dr-in" min="0" placeholder="ゲット">
+    <span class="slash">/</span>
+    <input class="narrow" type="number" id="${qi}-dr-tot" min="0" placeholder="総">
+    <span class="pct-out" id="${qi}-dr-pct">— %</span>
+  </div>
+  <div class="row">
+    <span class="sub-label">全体</span>
+    <input class="narrow" type="number" id="${qi}-dr2-in" min="0" placeholder="ゲット">
+    <span class="slash">/</span>
+    <input class="narrow" type="number" id="${qi}-dr2-tot" min="0" placeholder="総">
+    <span class="pct-out" id="${qi}-dr2-pct">— %</span>
+  </div>
+</div>
+
+<div class="stat-card">
+  <div class="stat-title">OFポゼ</div>
+  <div style="margin-bottom:8px">
+    <div class="sub-label" style="margin-bottom:4px">ショットが決まるまでの平均時間</div>
+    <div class="time-row">
+      <input class="time-in" type="number" id="${qi}-pos-avgm" min="0" placeholder="0">
+      <span class="colon">:</span>
+      <input class="time-in" type="number" id="${qi}-pos-avgs" min="0" max="59" placeholder="00">
+    </div>
+  </div>
+  <div>
+    <div class="sub-label" style="margin-bottom:4px">合計時間</div>
+    <div class="time-row">
+      <input class="time-in" type="number" id="${qi}-pos-totm" min="0" placeholder="0">
+      <span class="colon">:</span>
+      <input class="time-in" type="number" id="${qi}-pos-tots" min="0" max="59" placeholder="00">
+    </div>
+  </div>
+</div>
+`;
+}
+
+const container = document.getElementById('qpanels');
+qs.forEach((q, i) => {
+  const div = document.createElement('div');
+  div.className = 'qpanel' + (i === 0 ? ' active' : '');
+  div.id = `panel${i}`;
+  div.innerHTML = makeStat(i);
+  container.appendChild(div);
+});
+
+function calcPct(inId, totId, outId) {
+  const a = parseFloat(document.getElementById(inId)?.value) || 0;
+  const b = parseFloat(document.getElementById(totId)?.value) || 0;
+  const el = document.getElementById(outId);
+  if(!el) return;
+  if(b === 0) { el.textContent = '— %'; return; }
+  el.textContent = Math.round(a / b * 100) + '%';
+}
+
+const pctPairs = [
+  ['shot','shot'],['at','at'],['fs','fs'],['g','g'],
+  ['gb','gb'],['gb2','gb2'],['ps','ps'],['dr','dr'],['dr2','dr2']
+];
+
+document.addEventListener('input', e => {
+  const id = e.target?.id || '';
+  const match = id.match(/^(q\d)-(.*?)-(in|tot|pct)$/);
+  if(!match) return;
+  const qi = match[1], key = match[2];
+  calcPct(`${qi}-${key}-in`, `${qi}-${key}-tot`, `${qi}-${key}-pct`);
+});
+
+function switchQ(idx) {
+  document.querySelectorAll('.qpanel').forEach((p,i) => p.classList.toggle('active', i===idx));
+  document.querySelectorAll('.qtab').forEach((t,i) => t.classList.toggle('active', i===idx));
+}
+
+function v(id) { return document.getElementById(id)?.value || ''; }
+function num(id) { return v(id) || '0'; }
+function pct(a, b) {
+  const an = parseFloat(a) || 0, bn = parseFloat(b) || 0;
+  if(bn === 0) return '—';
+  return Math.round(an / bn * 100) + '';
+}
+function pad(s) { return String(s).padStart(2,'0'); }
+function time(m, s) {
+  const mm = v(m) || '0', ss = v(s) || '00';
+  return `${mm}:${pad(ss)}`;
+}
+
+function qBlock(qidx) {
+  const qi = `q${qidx}`;
+  const q = qs[qidx];
+  const own = num(`${qi}-qs-own`), opp = num(`${qi}-qs-opp`);
+  const shotIn = num(`${qi}-shot-in`), shotTot = num(`${qi}-shot-tot`);
+  const atIn = num(`${qi}-at-in`), atTot = num(`${qi}-at-tot`);
+  const fsIn = num(`${qi}-fs-in`), fsTot = num(`${qi}-fs-tot`);
+  const gName = v(`${qi}-g-name`) || 'G名前', gIn = num(`${qi}-g-in`), gTot = num(`${qi}-g-tot`);
+  const gbIn = num(`${qi}-gb-in`), gbTot = num(`${qi}-gb-tot`);
+  const gb2In = num(`${qi}-gb2-in`), gb2Tot = num(`${qi}-gb2-tot`);
+  const psName = v(`${qi}-ps-name`) || '名前', psIn = num(`${qi}-ps-in`), psTot = num(`${qi}-ps-tot`), psAst = num(`${qi}-ps-ast`);
+  const drName = v(`${qi}-dr-name`) || '名前', drIn = num(`${qi}-dr-in`), drTot = num(`${qi}-dr-tot`);
+  const dr2In = num(`${qi}-dr2-in`), dr2Tot = num(`${qi}-dr2-tot`);
+  const posAvg = time(`${qi}-pos-avgm`, `${qi}-pos-avgs`);
+  const posTot = time(`${qi}-pos-totm`, `${qi}-pos-tots`);
+
+  return `［${q}］ ${own} - ${opp}
+・ショット率　${shotIn} / ${shotTot} = ${pct(shotIn,shotTot)}%
+・ATセーブ率　${atIn} / ${atTot} = ${pct(atIn,atTot)}%
+・フリシュー決定率　${fsIn} / ${fsTot} = ${pct(fsIn,fsTot)}%
+・Gセーブ率
+${gName}　${gIn} / ${gTot} = ${pct(gIn,gTot)}%
+・GBゲット率
+　${gbIn} / ${gbTot} = ${pct(gbIn,gbTot)}%
+自陣　${gb2In} / ${gb2Tot} = ${pct(gb2In,gb2Tot)}%
+・個人ショット率
+${psName}　${psIn} / ${psTot} = ${pct(psIn,psTot)}%（アシスト ${psAst} 本）
+・ドローゲット率
+${drName}　${drIn} / ${drTot} = ${pct(drIn,drTot)}%
+全体　${dr2In} / ${dr2Tot} = ${pct(dr2In,dr2Tot)}%
+・OFポゼ
+ショットが決まるまでの平均時間　${posAvg}
+合計時間　${posTot}`;
+}
+
+function generate() {
+  const opp = v('opponent') || '◯◯大学';
+  const own = num('score-own'), opp2 = num('score-opp');
+  let titleType = '';
+  if(matchType === '練習試合') {
+    titleType = '練習試合';
+  } else {
+    const ln = v('league-num') || '◯';
+    titleType = `リーグ第${ln}戦`;
+  }
+
+  const txt = `お疲れさまです。
+本日の【${titleType}】vs${opp}の試合データです。
+データシート原本は後ほどドライブとslackにあげます。
+よろしくお願いします。
+
+スコア
+${own} - ${opp2}
+
+${[0,1,2,3].map(qBlock).join('\n\n')}`;
+
+  document.getElementById('output-box').textContent = txt;
+  const area = document.getElementById('output-area');
+  area.style.display = 'block';
+  area.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function copyText() {
+  const t = document.getElementById('output-box').textContent;
+  navigator.clipboard.writeText(t).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'コピーしました ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'クリップボードにコピー'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
