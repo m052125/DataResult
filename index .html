@@ -1,0 +1,390 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)}
+.app{padding:1rem 0 2rem}
+
+.top-card{border-radius:14px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);padding:1.25rem;margin-bottom:1rem}
+.top-card-title{font-size:11px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.75rem}
+
+.field-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px;letter-spacing:.04em}
+.field-group{margin-bottom:.75rem}
+.field-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+input[type=text],input[type=number],select{width:100%;padding:8px 11px;border:0.5px solid var(--color-border-secondary);border-radius:9px;background:var(--color-background-secondary);color:var(--color-text-primary);font-family:var(--font-sans);font-size:14px;transition:border-color .12s,background .12s}
+input:focus,select:focus{outline:none;border-color:#378ADD;background:var(--color-background-primary)}
+
+.score-wrap{display:flex;align-items:center;gap:10px}
+.score-wrap input{text-align:center;font-size:17px;font-weight:500;width:64px}
+.score-dash{font-size:20px;font-weight:300;color:var(--color-text-tertiary)}
+
+/* TABS */
+.tabs{display:flex;gap:6px;margin-bottom:1rem;background:var(--color-background-secondary);padding:5px;border-radius:12px}
+.tab{flex:1;padding:8px 0;text-align:center;border:none;border-radius:9px;background:transparent;color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:var(--font-sans)}
+.tab.on{background:#fff;color:#185FA5;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+.qpanel{display:none}.qpanel.on{display:block}
+
+/* STAT BLOCKS */
+.sblock{border-radius:12px;margin-bottom:10px;overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.shead{padding:8px 14px;font-size:11px;font-weight:500;letter-spacing:.05em;display:flex;align-items:center;gap:7px}
+.shead-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sbody{padding:10px 14px;background:var(--color-background-primary)}
+
+/* color themes per block */
+.theme-blue .shead{background:#E6F1FB;color:#0C447C}
+.theme-blue .shead-dot{background:#378ADD}
+.theme-teal .shead{background:#E1F5EE;color:#085041}
+.theme-teal .shead-dot{background:#1D9E75}
+.theme-amber .shead{background:#FAEEDA;color:#633806}
+.theme-amber .shead-dot{background:#BA7517}
+.theme-purple .shead{background:#EEEDFE;color:#3C3489}
+.theme-purple .shead-dot{background:#7F77DD}
+.theme-coral .shead{background:#FAECE7;color:#4A1B0C}
+.theme-coral .shead-dot{background:#D85A30}
+.theme-green .shead{background:#EAF3DE;color:#173404}
+.theme-green .shead-dot{background:#639922}
+.theme-gray .shead{background:#F1EFE8;color:#2C2C2A}
+.theme-gray .shead-dot{background:#888780}
+
+/* frac rows */
+.frow{display:flex;align-items:center;gap:7px;padding:5px 0}
+.frow+.frow{border-top:0.5px solid var(--color-border-tertiary)}
+.frow .flbl{font-size:12px;color:var(--color-text-secondary);min-width:62px}
+.frow input.fn{width:50px;text-align:center;padding:6px 4px;font-size:13px}
+.fsep{color:var(--color-text-tertiary);font-size:12px}
+.feq{color:var(--color-text-tertiary);font-size:12px}
+.fpct{min-width:48px;font-size:13px;font-weight:500;text-align:right}
+
+/* color-coded pct */
+.theme-blue .fpct{color:#185FA5}
+.theme-teal .fpct{color:#0F6E56}
+.theme-amber .fpct{color:#854F0B}
+.theme-purple .fpct{color:#534AB7}
+.theme-coral .fpct{color:#993C1D}
+.theme-green .fpct{color:#3B6D11}
+.theme-gray .fpct{color:#5F5E5A}
+
+/* player rows */
+.prow{display:flex;align-items:center;gap:7px;padding:5px 0;border-top:0.5px solid var(--color-border-tertiary)}
+.prow:first-child{border-top:none}
+.pname{flex:1;min-width:0;font-size:13px}
+.prow input.fn{width:50px;text-align:center;padding:6px 4px;font-size:13px}
+.ast-box{display:flex;align-items:center;gap:3px;margin-left:2px}
+.ast-box input{width:38px;padding:5px 3px;font-size:12px;text-align:center}
+.ast-lbl{font-size:10px;color:var(--color-text-tertiary);white-space:nowrap}
+
+/* add / del buttons */
+.add-btn{margin-top:8px;width:100%;padding:7px;border:1.5px dashed var(--color-border-secondary);border-radius:9px;background:transparent;font-size:12px;cursor:pointer;color:var(--color-text-secondary);font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;transition:background .12s}
+.add-btn:hover{background:var(--color-background-secondary)}
+.del-btn{width:22px;height:22px;border:none;background:none;cursor:pointer;color:#B4B2A9;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;padding:0;transition:background .1s,color .1s}
+.del-btn:hover{background:#FAECE7;color:#D85A30}
+
+/* time inputs */
+.time-pair{display:flex;align-items:center;gap:7px}
+.time-pair input{width:50px;text-align:center;font-size:13px;padding:6px 4px}
+.time-col{font-size:15px;font-weight:500;color:var(--color-text-secondary)}
+.time-lbl{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.time-grp{margin-bottom:9px}
+.time-grp:last-child{margin-bottom:0}
+
+.hr{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:3px 0}
+
+/* GENERATE BUTTON */
+.gen-btn{width:100%;margin-top:1rem;padding:13px;border:none;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font-sans);letter-spacing:.02em;background:linear-gradient(135deg,#185FA5 0%,#1D9E75 100%);color:#fff;transition:opacity .15s}
+.gen-btn:hover{opacity:.88}
+
+/* OUTPUT */
+.out-wrap{margin-top:1rem;display:none}
+.out-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:14px 16px;font-size:12.5px;line-height:1.8;white-space:pre-wrap;color:var(--color-text-primary);font-family:var(--font-mono);max-height:360px;overflow-y:auto}
+.copy-btn{margin-top:8px;width:100%;padding:10px;border:0.5px solid var(--color-border-secondary);border-radius:10px;background:transparent;color:var(--color-text-secondary);font-size:13px;cursor:pointer;font-family:var(--font-sans);transition:background .12s,color .12s,border-color .12s}
+.copy-btn:hover{background:var(--color-background-secondary)}
+.copy-btn.ok{color:#0F6E56;border-color:#1D9E75;background:#E1F5EE}
+
+/* G name row */
+.grow{display:flex;align-items:center;gap:7px}
+.grow .gname-in{flex:1;max-width:110px;font-size:13px}
+</style>
+
+<div class="app">
+<h2 class="sr-only">ラクロス試合速報フォーム</h2>
+
+<div class="top-card">
+  <div class="top-card-title">試合情報</div>
+  <div class="field-row2" style="margin-bottom:.75rem">
+    <div class="field-group">
+      <div class="field-label">試合種別</div>
+      <select id="match-type" onchange="onType()">
+        <option value="練習試合">練習試合</option>
+        <option value="league">リーグ戦</option>
+      </select>
+    </div>
+    <div class="field-group" id="lnum-wrap" style="display:none">
+      <div class="field-label">第◯戦</div>
+      <input type="number" id="lnum" min="1" placeholder="3">
+    </div>
+  </div>
+  <div class="field-group">
+    <div class="field-label">対戦相手</div>
+    <input type="text" id="opponent" placeholder="◯◯大学">
+  </div>
+  <div class="field-group" style="margin-bottom:0">
+    <div class="field-label">トータルスコア（自 − 相手）</div>
+    <div class="score-wrap">
+      <input type="number" id="ts-a" min="0" placeholder="0">
+      <span class="score-dash">−</span>
+      <input type="number" id="ts-b" min="0" placeholder="0">
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="switchQ(0)">1Q</button>
+  <button class="tab" onclick="switchQ(1)">2Q</button>
+  <button class="tab" onclick="switchQ(2)">3Q</button>
+  <button class="tab" onclick="switchQ(3)">4Q</button>
+</div>
+
+<div id="panels"></div>
+
+<button class="gen-btn" onclick="generate()">▶ 速報テキストを生成</button>
+<div class="out-wrap" id="out-wrap">
+  <div class="out-box" id="out-box"></div>
+  <button class="copy-btn" id="copy-btn" onclick="copyOut()">クリップボードにコピー</button>
+</div>
+</div>
+
+<script>
+function onType(){
+  const v=document.getElementById('match-type').value;
+  document.getElementById('lnum-wrap').style.display=v==='league'?'block':'none';
+}
+
+const THEMES=['blue','teal','amber','purple','coral','green','gray'];
+
+function pctCalc(a,b){
+  const an=parseFloat(a)||0,bn=parseFloat(b)||0;
+  if(bn===0)return null;
+  return Math.round(an/bn*100);
+}
+function pctStr(aId,bId){
+  const p=pctCalc(gv(aId),gv(bId));
+  return p===null?'—':p+'%';
+}
+function updatePct(aId,bId,pId){
+  const el=document.getElementById(pId);
+  if(el) el.textContent=pctStr(aId,bId);
+}
+
+function fracRow(qi,key,label,theme){
+  const aId=`${qi}-${key}-a`,bId=`${qi}-${key}-b`,pId=`${qi}-${key}-p`;
+  return `<div class="frow">
+    ${label?`<span class="flbl">${label}</span>`:''}
+    <input class="fn" type="number" id="${aId}" min="0" placeholder="0" oninput="updatePct('${aId}','${bId}','${pId}')">
+    <span class="fsep">/</span>
+    <input class="fn" type="number" id="${bId}" min="0" placeholder="0" oninput="updatePct('${aId}','${bId}','${pId}')">
+    <span class="feq">=</span>
+    <span class="fpct" id="${pId}">—</span>
+  </div>`;
+}
+
+let counters={};
+function addPRow(qi,key,hasAst){
+  const base=`q${qi}-${key}`;
+  if(!counters[base]) counters[base]=0;
+  const idx=counters[base]++;
+  const nId=`${base}-n${idx}`,aId=`${base}-a${idx}`,bId=`${base}-b${idx}`,pId=`${base}-p${idx}`;
+  const astPart=hasAst?`<div class="ast-box"><input type="number" id="${base}-ast${idx}" min="0" placeholder="0"><span class="ast-lbl">本</span></div>`:'';
+  const div=document.createElement('div');
+  div.className='prow';
+  div.id=`${base}-row${idx}`;
+  div.innerHTML=`
+    <input type="text" class="pname fn" id="${nId}" placeholder="名前" style="width:auto;flex:1">
+    <input class="fn" type="number" id="${aId}" min="0" placeholder="0" oninput="updatePct('${aId}','${bId}','${pId}')">
+    <span class="fsep">/</span>
+    <input class="fn" type="number" id="${bId}" min="0" placeholder="0" oninput="updatePct('${aId}','${bId}','${pId}')">
+    <span class="feq">=</span>
+    <span class="fpct" id="${pId}">—</span>
+    ${astPart}
+    <button class="del-btn" onclick="this.closest('.prow').remove()" title="削除">×</button>`;
+  return div;
+}
+
+function block(theme,icon,title,bodyHtml){
+  return `<div class="sblock theme-${theme}">
+    <div class="shead"><span class="shead-dot"></span>${title}</div>
+    <div class="sbody">${bodyHtml}</div>
+  </div>`;
+}
+
+function buildQ(qi){
+  const q=`q${qi}`;
+  const div=document.createElement('div');
+  div.className='qpanel'+(qi===0?' on':'');
+  div.id=`panel${qi}`;
+
+  div.innerHTML=
+    block('blue','','クォータースコア（自 − 相手）',`
+      <div class="score-wrap">
+        <input type="number" id="${q}-qs-a" min="0" placeholder="0" style="width:64px;text-align:center;font-size:17px;font-weight:500">
+        <span class="score-dash">−</span>
+        <input type="number" id="${q}-qs-b" min="0" placeholder="0" style="width:64px;text-align:center;font-size:17px;font-weight:500">
+      </div>`)+
+
+    block('blue','','チーム成績',
+      fracRow(q,'shot','ショット率')+
+      '<div class="hr"></div>'+
+      fracRow(q,'at','ATセーブ率')+
+      '<div class="hr"></div>'+
+      fracRow(q,'fs','フリシュー決定率'))+
+
+    block('teal','','Gセーブ率',`
+      <div class="grow">
+        <input type="text" class="gname-in fn" id="${q}-gname" placeholder="G名前">
+        <input class="fn" type="number" id="${q}-g-a" min="0" placeholder="0" oninput="updatePct('${q}-g-a','${q}-g-b','${q}-g-p')">
+        <span class="fsep">/</span>
+        <input class="fn" type="number" id="${q}-g-b" min="0" placeholder="0" oninput="updatePct('${q}-g-a','${q}-g-b','${q}-g-p')">
+        <span class="feq">=</span>
+        <span class="fpct" id="${q}-g-p">—</span>
+      </div>`)+
+
+    block('amber','','GBゲット率',
+      fracRow(q,'gb','全体')+
+      '<div class="hr"></div>'+
+      fracRow(q,'gb2','自陣'))+
+
+    block('purple','','個人ショット率',`<div id="${q}-ps-rows"></div><button class="add-btn" onclick="addTo(${qi},'ps',true)">＋ 選手を追加</button>`)+
+
+    block('coral','','個人フリシュー決定率',`<div id="${q}-pf-rows"></div><button class="add-btn" onclick="addTo(${qi},'pf',false)">＋ 選手を追加</button>`)+
+
+    block('green','','ドローゲット率',`
+      <div id="${q}-dr-rows"></div>
+      <button class="add-btn" onclick="addTo(${qi},'dr',false)">＋ 選手を追加</button>
+      <div class="hr" style="margin-top:8px"></div>
+      ${fracRow(q,'dr2','全体')}`)+
+
+    block('gray','','OFポゼ',`
+      <div class="time-grp">
+        <div class="time-lbl">ショットが決まるまでの平均時間</div>
+        <div class="time-pair">
+          <input class="fn" type="number" id="${q}-avg-m" min="0" placeholder="0">
+          <span class="time-col">:</span>
+          <input class="fn" type="number" id="${q}-avg-s" min="0" max="59" placeholder="00">
+        </div>
+      </div>
+      <div class="time-grp">
+        <div class="time-lbl">合計時間</div>
+        <div class="time-pair">
+          <input class="fn" type="number" id="${q}-tot-m" min="0" placeholder="0">
+          <span class="time-col">:</span>
+          <input class="fn" type="number" id="${q}-tot-s" min="0" max="59" placeholder="00">
+        </div>
+      </div>`);
+
+  document.getElementById('panels').appendChild(div);
+  addTo(qi,'ps',true);
+  addTo(qi,'pf',false);
+  addTo(qi,'dr',false);
+}
+
+function addTo(qi,key,hasAst){
+  const container=document.getElementById(`q${qi}-${key}-rows`);
+  if(container) container.appendChild(addPRow(qi,key,hasAst));
+}
+
+[0,1,2,3].forEach(buildQ);
+
+function switchQ(idx){
+  document.querySelectorAll('.qpanel').forEach((p,i)=>p.classList.toggle('on',i===idx));
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',i===idx));
+}
+
+function gv(id){return document.getElementById(id)?.value||''}
+function nv(id){return gv(id)||'0'}
+function tf(mId,sId){const s=gv(sId)||'00';return `${gv(mId)||'0'}:${String(s).padStart(2,'0')}`}
+
+function fracOut(qi,key,label){
+  const a=nv(`q${qi}-${key}-a`),b=nv(`q${qi}-${key}-b`);
+  const p=pctCalc(a,b);
+  const pStr=p===null?'—%':`${p}%`;
+  if(parseFloat(a)===0&&parseFloat(b)===0) return label?`${label}　-/ -= -%`:`-/ -= -%`;
+  return label?`${label}　${a}/ ${b}= ${pStr}`:`${a}/ ${b}= ${pStr}`;
+}
+
+function collectPlayers(qi,key,hasAst){
+  const base=`q${qi}-${key}`;
+  const rows=document.querySelectorAll(`[id^="${base}-row"]`);
+  const lines=[];
+  rows.forEach(row=>{
+    const idx=row.id.replace(`${base}-row`,'');
+    const nm=gv(`${base}-n${idx}`)||'名前';
+    const a=nv(`${base}-a${idx}`),b=nv(`${base}-b${idx}`);
+    const p=pctCalc(a,b);
+    const pStr=p===null?'—%':`${p}%`;
+    if(hasAst){
+      const ast=nv(`${base}-ast${idx}`);
+      lines.push(`${nm}　${a}/${b} = ${pStr}（アシスト ${ast} 本）`);
+    } else {
+      lines.push(`${nm}　${a}/ ${b}= ${pStr}`);
+    }
+  });
+  return lines.join('\n');
+}
+
+function qOut(qi){
+  const q=`q${qi}`;
+  const labels=['1Q','2Q','3Q','4Q'];
+  const qa=nv(`${q}-qs-a`),qb=nv(`${q}-qs-b`);
+  const gname=gv(`${q}-gname`)||'G名前';
+  const ga=nv(`${q}-g-a`),gb=nv(`${q}-g-b`);
+  const gp=pctCalc(ga,gb);
+  const gpStr=(parseFloat(ga)===0&&parseFloat(gb)===0)?'-/ -= -%':`${ga}/ ${gb}= ${gp===null?'—%':gp+'%'}`;
+
+  return `［${labels[qi]}］ ${qa}-${qb}
+・ショット率　 ${fracOut(q,'shot',null)}
+・ATセーブ率　 ${fracOut(q,'at',null)}
+・フリシュー決定率　 ${fracOut(q,'fs',null)}
+・Gセーブ率
+${gname}　 ${gpStr}
+・GBゲット率
+　 ${fracOut(q,'gb',null)}
+自陣　 ${fracOut(q,'gb2',null)}
+・個人ショット率
+${collectPlayers(qi,'ps',true)}
+・個人フリシュー決定率
+${collectPlayers(qi,'pf',false)}
+・ドローゲット率
+${collectPlayers(qi,'dr',false)}
+全体　 ${fracOut(q,'dr2',null)}
+・OFポゼ
+ショットが決まるまでの平均時間　${tf(`${q}-avg-m`,`${q}-avg-s`)}
+合計時間　 ${tf(`${q}-tot-m`,`${q}-tot-s`)}`;
+}
+
+function generate(){
+  const type=document.getElementById('match-type').value;
+  const typeLabel=type==='league'?`リーグ第${gv('lnum')||'◯'}戦`:'練習試合';
+  const opp=gv('opponent')||'◯◯大学';
+  const own=nv('ts-a'),opp2=nv('ts-b');
+  const txt=`お疲れさまです。
+本日の【${typeLabel}】vs${opp}の試合データです。
+データシート原本は後ほどドライブとslackにあげます。
+よろしくお願いします。
+スコア
+${own}-${opp2}
+
+${[0,1,2,3].map(qOut).join('\n\n')}`;
+  document.getElementById('out-box').textContent=txt;
+  const w=document.getElementById('out-wrap');
+  w.style.display='block';
+  setTimeout(()=>w.scrollIntoView({behavior:'smooth',block:'nearest'}),60);
+}
+
+function copyOut(){
+  navigator.clipboard.writeText(document.getElementById('out-box').textContent).then(()=>{
+    const b=document.getElementById('copy-btn');
+    b.textContent='コピーしました ✓';b.classList.add('ok');
+    setTimeout(()=>{b.textContent='クリップボードにコピー';b.classList.remove('ok');},2200);
+  });
+}
+</script>
