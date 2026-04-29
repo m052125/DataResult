@@ -1,0 +1,485 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--font-sans);font-size:16px;color:var(--color-text-primary);background:#F7F5F2}
+
+.app{min-height:100vh;display:flex;flex-direction:column}
+
+.topbar{background:var(--color-background-primary);border-bottom:1px solid #E8E4DE;padding:14px 14px 10px;position:sticky;top:0;z-index:100}
+.topbar-title{font-size:17px;font-weight:500;margin-bottom:10px;color:#1A1A1A;display:flex;align-items:center;gap:8px}
+.title-icon{font-size:20px}
+
+.qtabs{display:flex;gap:4px;background:#EDE9E3;padding:4px;border-radius:14px}
+.qtab{flex:1;height:38px;border:none;border-radius:10px;background:transparent;color:#888;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-sans);transition:all .18s}
+.qtab.on{background:#fff;color:#E05A2B;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+
+.scroll{flex:1;padding:12px 12px 110px;overflow-y:auto}
+
+.card{background:#fff;border-radius:16px;margin-bottom:10px;overflow:hidden;border:1px solid #EDEBE7}
+
+.card-head{padding:11px 14px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F0EDE8}
+.card-head-icon{font-size:16px;line-height:1}
+
+.head-blue{background:#EEF4FF;color:#2255B3}
+.head-teal{background:#E8F7F2;color:#0A6B52}
+.head-amber{background:#FEF5E7;color:#8A5200}
+.head-purple{background:#F1EFFE;color:#4A36B0}
+.head-coral{background:#FEF0ED;color:#B03020}
+.head-green{background:#EDF6E5;color:#2D6A0F}
+.head-gray{background:#F2F0EC;color:#4A4845}
+
+.card-body{padding:12px 14px}
+
+input,select{font-family:var(--font-sans);color:#1A1A1A;background:#F7F5F2;border:1.5px solid #E0DDD8;border-radius:12px;font-size:16px;width:100%;transition:border-color .15s,background .15s}
+input:focus,select:focus{outline:none;border-color:#E05A2B;background:#fff}
+input[type=text],select{height:50px;padding:0 14px}
+input[type=number]{height:50px;padding:0 8px;text-align:center}
+
+.field{margin-bottom:12px}
+.field:last-child{margin-bottom:0}
+.fl{font-size:13px;color:#888;font-weight:500;margin-bottom:6px}
+
+.score-row{display:flex;align-items:center;gap:10px}
+.score-row input{flex:1;font-size:22px;font-weight:500;height:58px;border-radius:14px}
+.sdash{font-size:26px;color:#CCC;flex-shrink:0;font-weight:300}
+
+.stat-line{display:flex;align-items:center;gap:8px;padding:10px 0;border-top:1px solid #F0EDE8}
+.stat-line:first-child{border-top:none;padding-top:0}
+.sname{font-size:14px;color:#555;flex:1;min-width:0}
+.sfrac{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.nin{width:58px!important;height:48px!important;font-size:16px!important;border-radius:10px!important}
+.fsep{font-size:16px;color:#CCC}
+.pct{font-size:15px;font-weight:500;min-width:54px;text-align:right}
+.pblue{color:#2255B3}.pteal{color:#0A6B52}.pamber{color:#8A5200}
+.ppurple{color:#4A36B0}.pcoral{color:#B03020}.pgreen{color:#2D6A0F}.pgray{color:#4A4845}
+
+.hint{text-align:center;padding:20px 0;font-size:14px;color:#BBB}
+
+.pcard{background:#F9F7F4;border:1px solid #EDEBE7;border-radius:14px;padding:12px;margin-bottom:8px}
+.pcard:last-child{margin-bottom:0}
+.pcard-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.pcard-top input[type=text]{flex:1;height:48px;background:#fff}
+.del-btn{width:44px;height:44px;border:1.5px solid #E0DDD8;background:#fff;color:#BBB;border-radius:12px;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;font-family:var(--font-sans)}
+.del-btn:active{background:#FEF0ED;color:#E05A2B;border-color:#E8A090}
+.pfrac{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pfrac input{width:62px!important;height:50px!important;font-size:18px!important;font-weight:500;border-radius:12px!important;background:#fff}
+.ast-chip{display:flex;align-items:center;gap:5px;background:#fff;border:1.5px solid #E0DDD8;border-radius:10px;padding:4px 10px;margin-left:2px}
+.ast-chip input{width:48px!important;height:38px!important;font-size:15px!important;background:transparent!important;border:none!important;border-radius:0!important}
+.ast-chip input:focus{background:transparent!important;border:none!important}
+.ast-lbl{font-size:13px;color:#AAA}
+
+.g-badge{background:#D4F0E5;color:#0A6B52;font-size:12px;font-weight:500;padding:5px 10px;border-radius:8px;flex-shrink:0;white-space:nowrap}
+
+.add-btn{width:100%;height:52px;margin-top:10px;border:2px dashed #D8D4CE;border-radius:14px;background:transparent;font-size:15px;color:#999;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px}
+.add-btn:active{background:#F2EFE9}
+
+.time-row{display:flex;align-items:center;gap:10px}
+.time-row input{width:76px!important;height:54px!important;font-size:20px!important;font-weight:500;border-radius:12px!important}
+.tcol{font-size:22px;color:#BBB;flex-shrink:0}
+
+.hr{border:none;border-top:1px solid #F0EDE8;margin:4px 0}
+
+/* BOTTOM */
+.bottombar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-top:1px solid #EDEBE7;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;z-index:100}
+.gen-btn{flex:1;height:54px;border:none;border-radius:14px;background:#E05A2B;color:#fff;font-size:16px;font-weight:500;cursor:pointer;font-family:var(--font-sans)}
+.gen-btn:active{opacity:.85}
+.clip-btn{height:54px;width:54px;flex-shrink:0;border:1.5px solid #E0DDD8;border-radius:14px;background:#fff;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center}
+.clip-btn:active{background:#F2EFE9}
+.clip-btn.ok{background:#E8F7F2;border-color:#1D9E75}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;justify-content:center}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:22px 22px 0 0;width:100%;padding:12px 14px calc(16px + env(safe-area-inset-bottom));max-height:82vh;display:flex;flex-direction:column}
+.modal-drag{width:36px;height:4px;background:#DDD;border-radius:2px;margin:0 auto 14px}
+.modal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.modal-title{font-size:16px;font-weight:500}
+.modal-close{width:32px;height:32px;border:none;background:#F2EFE9;border-radius:50%;cursor:pointer;font-size:18px;color:#888;display:flex;align-items:center;justify-content:center}
+.out-box{flex:1;overflow-y:auto;background:#F7F5F2;border-radius:14px;padding:14px;font-size:13px;line-height:1.9;white-space:pre-wrap;font-family:var(--font-mono);color:#333;min-height:0}
+.modal-actions{display:flex;gap:8px;margin-top:10px;flex-shrink:0}
+.modal-copy{flex:1;height:52px;border:none;border-radius:14px;background:#E05A2B;color:#fff;font-size:16px;font-weight:500;cursor:pointer;font-family:var(--font-sans)}
+.modal-copy:active{opacity:.85}
+.modal-copy.ok{background:#0A6B52}
+</style>
+
+<div class="app">
+<h2 class="sr-only">ラクロス試合速報入力フォーム</h2>
+
+<div class="topbar">
+  <div class="topbar-title"><span class="title-icon">🥍</span>試合速報フォーム</div>
+  <div class="qtabs">
+    <button class="qtab on" onclick="switchQ(0)">情報</button>
+    <button class="qtab" onclick="switchQ(1)">1Q</button>
+    <button class="qtab" onclick="switchQ(2)">2Q</button>
+    <button class="qtab" onclick="switchQ(3)">3Q</button>
+    <button class="qtab" onclick="switchQ(4)">4Q</button>
+  </div>
+</div>
+
+<div class="scroll" id="scroll">
+
+  <!-- 情報パネル -->
+  <div id="p0">
+    <div class="card">
+      <div class="card-head head-blue"><span class="card-head-icon">📋</span>試合情報</div>
+      <div class="card-body">
+        <div class="field">
+          <div class="fl">試合種別</div>
+          <select id="match-type" onchange="onType()">
+            <option value="練習試合">練習試合</option>
+            <option value="league">リーグ戦</option>
+          </select>
+        </div>
+        <div class="field" id="lnum-wrap" style="display:none">
+          <div class="fl">第◯戦</div>
+          <input type="number" id="lnum" inputmode="numeric" min="1" placeholder="例：3">
+        </div>
+        <div class="field">
+          <div class="fl">対戦相手</div>
+          <input type="text" id="opponent" placeholder="◯◯大学">
+        </div>
+        <div class="field">
+          <div class="fl">トータルスコア（自 − 相手）</div>
+          <div class="score-row">
+            <input type="number" id="ts-a" inputmode="numeric" min="0" placeholder="0">
+            <span class="sdash">−</span>
+            <input type="number" id="ts-b" inputmode="numeric" min="0" placeholder="0">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Qパネル -->
+  <div id="p1" style="display:none"></div>
+  <div id="p2" style="display:none"></div>
+  <div id="p3" style="display:none"></div>
+  <div id="p4" style="display:none"></div>
+
+</div>
+
+<div class="bottombar">
+  <button class="gen-btn" onclick="generate()">速報テキストを生成</button>
+  <button class="clip-btn" id="clip-btn" onclick="quickCopy()" title="コピー">📋</button>
+</div>
+
+<!-- モーダル -->
+<div class="modal-bg" id="modal-bg" onclick="bgClose(event)">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-top">
+      <div class="modal-title">生成テキスト</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="out-box" id="out-box"></div>
+    <div class="modal-actions">
+      <button class="modal-copy" id="modal-copy" onclick="copyOut()">コピーする</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+function onType(){
+  document.getElementById('lnum-wrap').style.display=
+    document.getElementById('match-type').value==='league'?'block':'none';
+}
+
+function switchQ(idx){
+  document.querySelectorAll('.qtab').forEach((t,i)=>t.classList.toggle('on',i===idx));
+  for(let i=0;i<=4;i++){
+    const el=document.getElementById('p'+i);
+    if(el) el.style.display=i===idx?'block':'none';
+  }
+  document.getElementById('scroll').scrollTop=0;
+}
+
+let ctr={};
+function uid(k){if(!ctr[k])ctr[k]=0;return ctr[k]++;}
+
+function pc(a,b){
+  const an=parseFloat(a)||0,bn=parseFloat(b)||0;
+  return bn===0?null:Math.round(an/bn*100);
+}
+function updPct(aId,bId,pId){
+  const el=document.getElementById(pId);if(!el)return;
+  const p=pc(document.getElementById(aId)?.value,document.getElementById(bId)?.value);
+  el.textContent=p===null?'—':p+'%';
+}
+
+function statLine(q,key,label,pcls){
+  const a=`${q}-${key}-a`,b=`${q}-${key}-b`,p=`${q}-${key}-p`;
+  return `<div class="stat-line">
+    <span class="sname">${label}</span>
+    <div class="sfrac">
+      <input class="nin" type="number" id="${a}" inputmode="numeric" min="0" placeholder="0" oninput="updPct('${a}','${b}','${p}')">
+      <span class="fsep">/</span>
+      <input class="nin" type="number" id="${b}" inputmode="numeric" min="0" placeholder="0" oninput="updPct('${a}','${b}','${p}')">
+      <span class="fsep">=</span>
+      <span class="pct ${pcls}" id="${p}">—</span>
+    </div>
+  </div>`;
+}
+
+function removeCard(cardId,rowsId,btnLabel){
+  const card=document.getElementById(cardId);
+  if(card)card.remove();
+  checkEmpty(rowsId,btnLabel);
+}
+
+function checkEmpty(rowsId,label){
+  const el=document.getElementById(rowsId);if(!el)return;
+  if(!el.querySelector('.pcard,.gcard')){
+    if(!el.querySelector('.hint')){
+      const h=document.createElement('div');
+      h.className='hint';h.textContent=label;
+      el.appendChild(h);
+    }
+  }
+}
+
+function addGoalie(qi){
+  const base=`q${qi}g`,rows=document.getElementById(`${base}-rows`);
+  if(!rows)return;
+  const hint=rows.querySelector('.hint');if(hint)hint.remove();
+  const idx=uid(base);
+  const nId=`${base}n${idx}`,aId=`${base}a${idx}`,bId=`${base}b${idx}`,pId=`${base}p${idx}`;
+  const cardId=`${base}c${idx}`;
+  const div=document.createElement('div');
+  div.className='gcard pcard';div.id=cardId;
+  div.innerHTML=`
+    <div class="pcard-top">
+      <span class="g-badge">G</span>
+      <input type="text" id="${nId}" placeholder="ゴーリー名">
+      <button class="del-btn" onclick="removeCard('${cardId}','${base}-rows','ゴーリーを追加してください')">×</button>
+    </div>
+    <div class="pfrac">
+      <input type="number" id="${aId}" inputmode="numeric" min="0" placeholder="0" oninput="updPct('${aId}','${bId}','${pId}')">
+      <span class="fsep">/</span>
+      <input type="number" id="${bId}" inputmode="numeric" min="0" placeholder="0" oninput="updPct('${aId}','${bId}','${pId}')">
+      <span class="fsep">=</span>
+      <span class="pct pteal" id="${pId}">—</span>
+    </div>`;
+  rows.appendChild(div);
+}
+
+function addPlayer(qi,key,hasAst){
+  const base=`q${qi}${key}`,rows=document.getElementById(`${base}-rows`);
+  if(!rows)return;
+  const hint=rows.querySelector('.hint');if(hint)hint.remove();
+  const idx=uid(base);
+  const nId=`${base}n${idx}`,aId=`${base}a${idx}`,bId=`${base}b${idx}`,pId=`${base}p${idx}`;
+  const cardId=`${base}c${idx}`;
+  const astHtml=hasAst?`<div class="ast-chip"><input type="number" id="${base}ast${idx}" inputmode="numeric" min="0" placeholder="0"><span class="ast-lbl">本</span></div>`:'';
+  const div=document.createElement('div');
+  div.className='pcard';div.id=cardId;
+  div.innerHTML=`
+    <div class="pcard-top">
+      <input type="text" id="${nId}" placeholder="名前を入力">
+      <button class="del-btn" onclick="removeCard('${cardId}','${base}-rows','選手を追加してください')">×</button>
+    </div>
+    <div class="pfrac">
+      <input type="number" id="${aId}" inputmode="numeric" min="0" placeholder="0" oninput="updPct('${aId}','${bId}','${pId}')">
+      <span class="fsep">/</span>
+      <input type="number" id="${bId}" inputmode="numeric" min="0" placeholder="0" oninput="updPct('${aId}','${bId}','${pId}')">
+      <span class="fsep">=</span>
+      <span class="pct ppurple" id="${pId}">—</span>
+      ${astHtml}
+    </div>`;
+  rows.appendChild(div);
+}
+
+function buildQ(qi){
+  const q=`q${qi}`;
+  const container=document.getElementById('p'+qi);
+  container.innerHTML=`
+  <div class="card">
+    <div class="card-head head-blue"><span class="card-head-icon">🏆</span>クォータースコア</div>
+    <div class="card-body">
+      <div class="score-row">
+        <input type="number" id="${q}-qs-a" inputmode="numeric" min="0" placeholder="自">
+        <span class="sdash">−</span>
+        <input type="number" id="${q}-qs-b" inputmode="numeric" min="0" placeholder="相手">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head head-blue"><span class="card-head-icon">📊</span>チーム成績</div>
+    <div class="card-body">
+      ${statLine(q,'shot','ショット率','pblue')}
+      ${statLine(q,'at','ATセーブ率','pblue')}
+      ${statLine(q,'fs','フリシュー決定率','pblue')}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head head-teal"><span class="card-head-icon">🥅</span>Gセーブ率</div>
+    <div class="card-body">
+      <div id="q${qi}g-rows"><div class="hint">ゴーリーを追加してください</div></div>
+      <button class="add-btn" onclick="addGoalie(${qi})">＋ ゴーリーを追加</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head head-amber"><span class="card-head-icon">⚡</span>GBゲット率</div>
+    <div class="card-body">
+      ${statLine(q,'gb','全体','pamber')}
+      ${statLine(q,'gb2','自陣','pamber')}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head head-purple"><span class="card-head-icon">🎯</span>個人ショット率</div>
+    <div class="card-body">
+      <div id="q${qi}ps-rows"><div class="hint">選手を追加してください</div></div>
+      <button class="add-btn" onclick="addPlayer(${qi},'ps',true)">＋ 選手を追加</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head head-coral"><span class="card-head-icon">🥊</span>個人フリシュー決定率</div>
+    <div class="card-body">
+      <div id="q${qi}pf-rows"><div class="hint">選手を追加してください</div></div>
+      <button class="add-btn" onclick="addPlayer(${qi},'pf',false)">＋ 選手を追加</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head head-green"><span class="card-head-icon">🔄</span>ドローゲット率</div>
+    <div class="card-body">
+      <div id="q${qi}dr-rows"><div class="hint">選手を追加してください</div></div>
+      <button class="add-btn" onclick="addPlayer(${qi},'dr',false)">＋ 選手を追加</button>
+      <hr class="hr" style="margin:12px 0">
+      ${statLine(q,'dr2','全体','pgreen')}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head head-gray"><span class="card-head-icon">⏱️</span>OFポゼ</div>
+    <div class="card-body">
+      <div class="field">
+        <div class="fl">平均時間（ショットまで）</div>
+        <div class="time-row">
+          <input type="number" id="${q}-avg-m" inputmode="numeric" min="0" placeholder="0">
+          <span class="tcol">:</span>
+          <input type="number" id="${q}-avg-s" inputmode="numeric" min="0" max="59" placeholder="00">
+        </div>
+      </div>
+      <div class="field">
+        <div class="fl">合計時間</div>
+        <div class="time-row">
+          <input type="number" id="${q}-tot-m" inputmode="numeric" min="0" placeholder="0">
+          <span class="tcol">:</span>
+          <input type="number" id="${q}-tot-s" inputmode="numeric" min="0" max="59" placeholder="00">
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+[1,2,3,4].forEach(buildQ);
+
+function gv(id){return document.getElementById(id)?.value||''}
+function nv(id){return gv(id)||'0'}
+function tf(m,s){return `${gv(m)||'0'}:${String(gv(s)||'0').padStart(2,'0')}`}
+
+function fracOut(q,key){
+  const a=nv(`${q}-${key}-a`),b=nv(`${q}-${key}-b`);
+  if(parseFloat(a)===0&&parseFloat(b)===0)return '-/ -= -%';
+  const p=pc(a,b);return `${a}/ ${b}= ${p===null?'—%':p+'%'}`;
+}
+
+function collectGoalies(qi){
+  const base=`q${qi}g`;
+  const cards=document.querySelectorAll(`[id^="${base}c"]`);
+  if(!cards.length)return '（なし）';
+  return Array.from(cards).map(card=>{
+    const idx=card.id.replace(`${base}c`,'');
+    const nm=gv(`${base}n${idx}`)||'G名前';
+    const a=nv(`${base}a${idx}`),b=nv(`${base}b${idx}`);
+    const p=pc(a,b);
+    const pStr=(parseFloat(a)===0&&parseFloat(b)===0)?'-/ -= -%':`${a}/ ${b}= ${p===null?'—%':p+'%'}`;
+    return `${nm}　 ${pStr}`;
+  }).join('\n');
+}
+
+function collectPlayers(qi,key,hasAst){
+  const base=`q${qi}${key}`;
+  const cards=document.querySelectorAll(`[id^="${base}c"]`);
+  if(!cards.length)return '（なし）';
+  return Array.from(cards).map(card=>{
+    const idx=card.id.replace(`${base}c`,'');
+    const nm=gv(`${base}n${idx}`)||'名前';
+    const a=nv(`${base}a${idx}`),b=nv(`${base}b${idx}`);
+    const p=pc(a,b);const pStr=p===null?'—%':p+'%';
+    if(hasAst){const ast=nv(`${base}ast${idx}`);return `${nm}　${a}/${b} = ${pStr}（アシスト ${ast} 本）`;}
+    return `${nm}　${a}/ ${b}= ${pStr}`;
+  }).join('\n');
+}
+
+function qOut(qi){
+  const q=`q${qi}`,lb=['','1Q','2Q','3Q','4Q'];
+  const goalies=collectGoalies(qi);
+  return `［${lb[qi]}］ ${nv(`${q}-qs-a`)}-${nv(`${q}-qs-b`)}
+・ゴーリー
+${goalies}
+・ショット率　 ${fracOut(q,'shot')}
+・ATセーブ率　 ${fracOut(q,'at')}
+・フリシュー決定率　 ${fracOut(q,'fs')}
+・Gセーブ率
+${goalies}
+・GBゲット率
+　 ${fracOut(q,'gb')}
+自陣　 ${fracOut(q,'gb2')}
+・個人ショット率
+${collectPlayers(qi,'ps',true)}
+・個人フリシュー決定率
+${collectPlayers(qi,'pf',false)}
+・ドローゲット率
+${collectPlayers(qi,'dr',false)}
+全体　 ${fracOut(q,'dr2')}
+・OFポゼ
+ショットが決まるまでの平均時間　${tf(`${q}-avg-m`,`${q}-avg-s`)}
+合計時間　 ${tf(`${q}-tot-m`,`${q}-tot-s`)}`;
+}
+
+function buildText(){
+  const type=document.getElementById('match-type').value;
+  const tl=type==='league'?`リーグ第${gv('lnum')||'◯'}戦`:'練習試合';
+  const opp=gv('opponent')||'◯◯大学';
+  return `お疲れさまです。
+本日の【${tl}】vs${opp}の試合データです。
+データシート原本は後ほどドライブとslackにあげます。
+よろしくお願いします。
+スコア
+${nv('ts-a')}-${nv('ts-b')}
+
+${[1,2,3,4].map(qOut).join('\n\n')}`;
+}
+
+function generate(){
+  document.getElementById('out-box').textContent=buildText();
+  document.getElementById('modal-bg').classList.add('show');
+}
+
+function quickCopy(){
+  navigator.clipboard.writeText(buildText()).then(()=>{
+    const b=document.getElementById('clip-btn');
+    b.textContent='✅';b.classList.add('ok');
+    setTimeout(()=>{b.textContent='📋';b.classList.remove('ok');},2000);
+  });
+}
+
+function copyOut(){
+  navigator.clipboard.writeText(document.getElementById('out-box').textContent).then(()=>{
+    const b=document.getElementById('modal-copy');
+    b.textContent='コピーしました ✓';b.classList.add('ok');
+    setTimeout(()=>{b.textContent='コピーする';b.classList.remove('ok');},2200);
+  });
+}
+
+function closeModal(){document.getElementById('modal-bg').classList.remove('show');}
+function bgClose(e){if(e.target===document.getElementById('modal-bg'))closeModal();}
+</script>
