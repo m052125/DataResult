@@ -10,14 +10,15 @@ body{font-family:var(--font-sans);font-size:16px;color:var(--color-text-primary)
 .title-icon{font-size:20px}
 
 .qtabs{display:flex;gap:4px;background:#EDE9E3;padding:4px;border-radius:14px}
-.qtab{flex:1;height:38px;border:none;border-radius:10px;background:transparent;color:#888;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-sans);transition:all .18s}
+/* ▼ タブ高さを少し大きく */
+.qtab{flex:1;height:44px;border:none;border-radius:10px;background:transparent;color:#888;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-sans);transition:all .18s}
 .qtab.on{background:#fff;color:#E05A2B;box-shadow:0 1px 4px rgba(0,0,0,.1)}
 
-.scroll{flex:1;padding:12px 12px 110px;overflow-y:auto}
+.scroll{flex:1;padding:12px 12px 120px;overflow-y:auto}
 
 .card{background:#fff;border-radius:16px;margin-bottom:10px;overflow:hidden;border:1px solid #EDEBE7}
 
-.card-head{padding:11px 14px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F0EDE8}
+.card-head{padding:12px 14px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F0EDE8}
 .card-head-icon{font-size:16px;line-height:1}
 
 .head-blue{background:#EEF4FF;color:#2255B3}
@@ -30,24 +31,31 @@ body{font-family:var(--font-sans);font-size:16px;color:var(--color-text-primary)
 
 .card-body{padding:12px 14px}
 
+/* ▼ ズーム防止: すべての入力を font-size:16px 以上に */
 input,select{font-family:var(--font-sans);color:#1A1A1A;background:#F7F5F2;border:1.5px solid #E0DDD8;border-radius:12px;font-size:16px;width:100%;transition:border-color .15s,background .15s}
 input:focus,select:focus{outline:none;border-color:#E05A2B;background:#fff}
-input[type=text],select{height:50px;padding:0 14px}
-input[type=number]{height:50px;padding:0 8px;text-align:center}
+input[type=text],select{height:52px;padding:0 14px}
+input[type=number]{height:52px;padding:0 8px;text-align:center}
+
+/* ▼ 読み取り専用（ドロー全体の自動計算欄） */
+input[readonly]{background:#F0EDE8!important;color:#999!important;border-style:dashed!important;cursor:default}
+input[readonly]:focus{border-color:#E0DDD8!important;background:#F0EDE8!important}
 
 .field{margin-bottom:12px}
 .field:last-child{margin-bottom:0}
 .fl{font-size:13px;color:#888;font-weight:500;margin-bottom:6px}
 
 .score-row{display:flex;align-items:center;gap:10px}
-.score-row input{flex:1;font-size:22px;font-weight:500;height:58px;border-radius:14px}
+.score-row input{flex:1;font-size:22px;font-weight:500;height:62px;border-radius:14px}
 .sdash{font-size:26px;color:#CCC;flex-shrink:0;font-weight:300}
 
-.stat-line{display:flex;align-items:center;gap:8px;padding:10px 0;border-top:1px solid #F0EDE8}
+/* ▼ stat行の高さを大きく */
+.stat-line{display:flex;align-items:center;gap:8px;padding:12px 0;border-top:1px solid #F0EDE8}
 .stat-line:first-child{border-top:none;padding-top:0}
 .sname{font-size:14px;color:#555;flex:1;min-width:0}
 .sfrac{display:flex;align-items:center;gap:7px;flex-shrink:0}
-.nin{width:58px!important;height:48px!important;font-size:16px!important;border-radius:10px!important}
+/* ▼ 数値入力ボックスを大きく */
+.nin{width:62px!important;height:54px!important;font-size:16px!important;border-radius:10px!important}
 .fsep{font-size:16px;color:#CCC}
 .pct{font-size:15px;font-weight:500;min-width:54px;text-align:right}
 .pblue{color:#2255B3}.pteal{color:#0A6B52}.pamber{color:#8A5200}
@@ -58,32 +66,35 @@ input[type=number]{height:50px;padding:0 8px;text-align:center}
 .pcard{background:#F9F7F4;border:1px solid #EDEBE7;border-radius:14px;padding:12px;margin-bottom:8px}
 .pcard:last-child{margin-bottom:0}
 .pcard-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.pcard-top input[type=text]{flex:1;height:48px;background:#fff}
-.del-btn{width:44px;height:44px;border:1.5px solid #E0DDD8;background:#fff;color:#BBB;border-radius:12px;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;font-family:var(--font-sans)}
+.pcard-top input[type=text]{flex:1;height:52px;background:#fff}
+/* ▼ 削除ボタンを大きく */
+.del-btn{width:52px;height:52px;border:1.5px solid #E0DDD8;background:#fff;color:#BBB;border-radius:12px;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;font-family:var(--font-sans)}
 .del-btn:active{background:#FEF0ED;color:#E05A2B;border-color:#E8A090}
 .pfrac{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.pfrac input{width:62px!important;height:50px!important;font-size:18px!important;font-weight:500;border-radius:12px!important;background:#fff}
+.pfrac input{width:64px!important;height:54px!important;font-size:18px!important;font-weight:500;border-radius:12px!important;background:#fff}
 .ast-chip{display:flex;align-items:center;gap:5px;background:#fff;border:1.5px solid #E0DDD8;border-radius:10px;padding:4px 10px;margin-left:2px}
-.ast-chip input{width:48px!important;height:38px!important;font-size:15px!important;background:transparent!important;border:none!important;border-radius:0!important}
+/* ▼ ast-chip内もズーム防止で16px */
+.ast-chip input{width:52px!important;height:42px!important;font-size:16px!important;background:transparent!important;border:none!important;border-radius:0!important}
 .ast-chip input:focus{background:transparent!important;border:none!important}
 .ast-lbl{font-size:13px;color:#AAA}
 
 .g-badge{background:#D4F0E5;color:#0A6B52;font-size:12px;font-weight:500;padding:5px 10px;border-radius:8px;flex-shrink:0;white-space:nowrap}
 
-.add-btn{width:100%;height:52px;margin-top:10px;border:2px dashed #D8D4CE;border-radius:14px;background:transparent;font-size:15px;color:#999;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px}
+/* ▼ 追加ボタンを大きく */
+.add-btn{width:100%;height:60px;margin-top:10px;border:2px dashed #D8D4CE;border-radius:14px;background:transparent;font-size:16px;color:#999;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px}
 .add-btn:active{background:#F2EFE9}
 
 .time-row{display:flex;align-items:center;gap:10px}
-.time-row input{width:76px!important;height:54px!important;font-size:20px!important;font-weight:500;border-radius:12px!important}
+.time-row input{width:80px!important;height:58px!important;font-size:20px!important;font-weight:500;border-radius:12px!important}
 .tcol{font-size:22px;color:#BBB;flex-shrink:0}
 
 .hr{border:none;border-top:1px solid #F0EDE8;margin:4px 0}
 
-/* BOTTOM */
-.bottombar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-top:1px solid #EDEBE7;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;z-index:100}
-.gen-btn{flex:1;height:54px;border:none;border-radius:14px;background:#E05A2B;color:#fff;font-size:16px;font-weight:500;cursor:pointer;font-family:var(--font-sans)}
+/* ▼ 下部バーとボタンを大きく */
+.bottombar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-top:1px solid #EDEBE7;padding:10px 14px calc(12px + env(safe-area-inset-bottom));display:flex;gap:8px;z-index:100}
+.gen-btn{flex:1;height:62px;border:none;border-radius:16px;background:#E05A2B;color:#fff;font-size:17px;font-weight:500;cursor:pointer;font-family:var(--font-sans)}
 .gen-btn:active{opacity:.85}
-.clip-btn{height:54px;width:54px;flex-shrink:0;border:1.5px solid #E0DDD8;border-radius:14px;background:#fff;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center}
+.clip-btn{height:62px;width:62px;flex-shrink:0;border:1.5px solid #E0DDD8;border-radius:16px;background:#fff;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center}
 .clip-btn:active{background:#F2EFE9}
 .clip-btn.ok{background:#E8F7F2;border-color:#1D9E75}
 
@@ -94,12 +105,16 @@ input[type=number]{height:50px;padding:0 8px;text-align:center}
 .modal-drag{width:36px;height:4px;background:#DDD;border-radius:2px;margin:0 auto 14px}
 .modal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .modal-title{font-size:16px;font-weight:500}
-.modal-close{width:32px;height:32px;border:none;background:#F2EFE9;border-radius:50%;cursor:pointer;font-size:18px;color:#888;display:flex;align-items:center;justify-content:center}
+.modal-close{width:36px;height:36px;border:none;background:#F2EFE9;border-radius:50%;cursor:pointer;font-size:20px;color:#888;display:flex;align-items:center;justify-content:center}
 .out-box{flex:1;overflow-y:auto;background:#F7F5F2;border-radius:14px;padding:14px;font-size:13px;line-height:1.9;white-space:pre-wrap;font-family:var(--font-mono);color:#333;min-height:0}
 .modal-actions{display:flex;gap:8px;margin-top:10px;flex-shrink:0}
-.modal-copy{flex:1;height:52px;border:none;border-radius:14px;background:#E05A2B;color:#fff;font-size:16px;font-weight:500;cursor:pointer;font-family:var(--font-sans)}
+/* ▼ モーダルコピーボタンも大きく */
+.modal-copy{flex:1;height:60px;border:none;border-radius:16px;background:#E05A2B;color:#fff;font-size:17px;font-weight:500;cursor:pointer;font-family:var(--font-sans)}
 .modal-copy:active{opacity:.85}
 .modal-copy.ok{background:#0A6B52}
+
+/* ▼ 自動計算ラベル */
+.auto-label{font-size:11px;color:#BA7517;background:#FEF5E7;border-radius:6px;padding:2px 6px;margin-left:4px;font-weight:500}
 </style>
 
 <div class="app">
@@ -117,8 +132,6 @@ input[type=number]{height:50px;padding:0 8px;text-align:center}
 </div>
 
 <div class="scroll" id="scroll">
-
-  <!-- 情報パネル -->
   <div id="p0">
     <div class="card">
       <div class="card-head head-blue"><span class="card-head-icon">📋</span>試合情報</div>
@@ -132,7 +145,7 @@ input[type=number]{height:50px;padding:0 8px;text-align:center}
         </div>
         <div class="field" id="lnum-wrap" style="display:none">
           <div class="fl">第◯戦</div>
-          <input type="number" id="lnum" inputmode="numeric" min="1" placeholder="例：3  ※推奨:半角数字">
+          <input type="number" id="lnum" inputmode="numeric" min="1" placeholder="例：3">
         </div>
         <div class="field">
           <div class="fl">対戦相手</div>
@@ -149,13 +162,10 @@ input[type=number]{height:50px;padding:0 8px;text-align:center}
       </div>
     </div>
   </div>
-
-  <!-- Qパネル -->
   <div id="p1" style="display:none"></div>
   <div id="p2" style="display:none"></div>
   <div id="p3" style="display:none"></div>
   <div id="p4" style="display:none"></div>
-
 </div>
 
 <div class="bottombar">
@@ -163,7 +173,6 @@ input[type=number]{height:50px;padding:0 8px;text-align:center}
   <button class="clip-btn" id="clip-btn" onclick="quickCopy()" title="コピー">📋</button>
 </div>
 
-<!-- モーダル -->
 <div class="modal-bg" id="modal-bg" onclick="bgClose(event)">
   <div class="modal">
     <div class="modal-drag"></div>
@@ -177,7 +186,6 @@ input[type=number]{height:50px;padding:0 8px;text-align:center}
     </div>
   </div>
 </div>
-
 </div>
 
 <script>
@@ -208,24 +216,43 @@ function updPct(aId,bId,pId){
   el.textContent=p===null?'—':p+'%';
 }
 
-function statLine(q,key,label,pcls){
+/* ▼ ドロー全体を個人の合計から自動計算 */
+function calcDrTotal(qi){
+  const base=`q${qi}dr`;
+  const cards=document.querySelectorAll(`[id^="${base}c"]`);
+  let sumA=0,sumB=0;
+  cards.forEach(card=>{
+    const idx=card.id.replace(`${base}c`,'');
+    sumA+=parseFloat(document.getElementById(`${base}a${idx}`)?.value)||0;
+    sumB+=parseFloat(document.getElementById(`${base}b${idx}`)?.value)||0;
+  });
+  const aEl=document.getElementById(`q${qi}-dr2-a`);
+  const bEl=document.getElementById(`q${qi}-dr2-b`);
+  if(aEl) aEl.value=cards.length?sumA:'';
+  if(bEl) bEl.value=cards.length?sumB:'';
+  updPct(`q${qi}-dr2-a`,`q${qi}-dr2-b`,`q${qi}-dr2-p`);
+}
+
+function statLine(q,key,label,pcls,readonly){
   const a=`${q}-${key}-a`,b=`${q}-${key}-b`,p=`${q}-${key}-p`;
+  const ro=readonly?'readonly':''
   return `<div class="stat-line">
     <span class="sname">${label}</span>
     <div class="sfrac">
-      <input class="nin" type="number" id="${a}" inputmode="numeric" min="0" placeholder="0" oninput="updPct('${a}','${b}','${p}')">
+      <input class="nin" type="number" id="${a}" inputmode="numeric" min="0" placeholder="0" ${ro} oninput="updPct('${a}','${b}','${p}')">
       <span class="fsep">/</span>
-      <input class="nin" type="number" id="${b}" inputmode="numeric" min="0" placeholder="0" oninput="updPct('${a}','${b}','${p}')">
+      <input class="nin" type="number" id="${b}" inputmode="numeric" min="0" placeholder="0" ${ro} oninput="updPct('${a}','${b}','${p}')">
       <span class="fsep">=</span>
       <span class="pct ${pcls}" id="${p}">—</span>
     </div>
   </div>`;
 }
 
-function removeCard(cardId,rowsId,btnLabel){
+function removeCard(cardId,rowsId,btnLabel,onAfter){
   const card=document.getElementById(cardId);
   if(card)card.remove();
   checkEmpty(rowsId,btnLabel);
+  if(onAfter)onAfter();
 }
 
 function checkEmpty(rowsId,label){
@@ -272,17 +299,20 @@ function addPlayer(qi,key,hasAst){
   const nId=`${base}n${idx}`,aId=`${base}a${idx}`,bId=`${base}b${idx}`,pId=`${base}p${idx}`;
   const cardId=`${base}c${idx}`;
   const astHtml=hasAst?`<div class="ast-chip"><input type="number" id="${base}ast${idx}" inputmode="numeric" min="0" placeholder="0"><span class="ast-lbl">アシスト　本</span></div>`:'';
+  /* ▼ drの場合は入力のたびに全体を再計算 */
+  const extraInput=key==='dr'?`;calcDrTotal(${qi})`:'';
+  const delExtra=key==='dr'?`,()=>calcDrTotal(${qi})`:'';
   const div=document.createElement('div');
   div.className='pcard';div.id=cardId;
   div.innerHTML=`
     <div class="pcard-top">
       <input type="text" id="${nId}" placeholder="名前を入力">
-      <button class="del-btn" onclick="removeCard('${cardId}','${base}-rows','選手を追加してください')">×</button>
+      <button class="del-btn" onclick="removeCard('${cardId}','${base}-rows','選手を追加してください'${delExtra})">×</button>
     </div>
     <div class="pfrac">
-      <input type="number" id="${aId}" inputmode="numeric" min="0" placeholder="0" oninput="updPct('${aId}','${bId}','${pId}')">
+      <input type="number" id="${aId}" inputmode="numeric" min="0" placeholder="0" oninput="updPct('${aId}','${bId}','${pId}')${extraInput}">
       <span class="fsep">/</span>
-      <input type="number" id="${bId}" inputmode="numeric" min="0" placeholder="0" oninput="updPct('${aId}','${bId}','${pId}')">
+      <input type="number" id="${bId}" inputmode="numeric" min="0" placeholder="0" oninput="updPct('${aId}','${bId}','${pId}')${extraInput}">
       <span class="fsep">=</span>
       <span class="pct ppurple" id="${pId}">—</span>
       ${astHtml}
@@ -352,7 +382,7 @@ function buildQ(qi){
       <div id="q${qi}dr-rows"><div class="hint">選手を追加してください</div></div>
       <button class="add-btn" onclick="addPlayer(${qi},'dr',false)">＋ 選手を追加</button>
       <hr class="hr" style="margin:12px 0">
-      ${statLine(q,'dr2','全体','pgreen')}
+      ${statLine(q,'dr2','全体','pgreen',true)}
     </div>
   </div>
 
@@ -476,7 +506,7 @@ function copyOut(){
   navigator.clipboard.writeText(document.getElementById('out-box').textContent).then(()=>{
     const b=document.getElementById('modal-copy');
     b.textContent='コピーしました ✓';b.classList.add('ok');
-    setTimeout(()=>{b.textContent='コピーする';b.classList.remove('ok');},2200);
+    setTimeout(()=>{b.textContent='クリップボードにコピーする';b.classList.remove('ok');},2200);
   });
 }
 
